@@ -29,6 +29,12 @@ mongoose.connect(dbURI)
   });
 
 
+const  congeRouter = require('./routes/conge');
+const  soldeCongeRoute= require('./routes/soldeConge')
+
+app.use('/conge', congeRouter);
+app.use('/soldeconge',soldeCongeRoute);
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
