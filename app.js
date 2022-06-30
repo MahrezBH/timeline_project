@@ -29,6 +29,12 @@ mongoose.connect(dbURI)
   });
 
 
+// project routes
+const usersRouter = require('./routes/users');
+app.use('/users', usersRouter);
+
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
