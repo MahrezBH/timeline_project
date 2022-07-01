@@ -30,10 +30,21 @@ module.exports = {
         const conge = await Conge.findByIdAndUpdate(id,{...req.body});
         res.json(conge);
     },
-
     addSoldeConge: async(req, res)=>{
-
-
-
-    }
+        const solde = new Soldeconge({...req.body});
+        await solde.save();
+        res.json(solde);
+         },
+        
+         showAllSoldeConge: async (req, res)=>{
+            const solde = await Soldeconge.find();
+            res.json(solde);
+         },
+        
+          showsoldebyid: async (req, res)=>{
+            const {id} = req.params;
+        const sode = await Soldeconge.findById(id);
+        res.json(sode);
+          }
+        
 }
