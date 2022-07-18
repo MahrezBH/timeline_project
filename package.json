@@ -13,6 +13,7 @@
     "http-errors": "~1.6.3",
     "mongoose": "^6.4.0",
     "morgan": "~1.9.1",
+    "pdfkit": "^0.13.0",
     "twig": "~0.10.3",
     "validator": "^13.7.0"
   }

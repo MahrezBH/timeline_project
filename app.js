@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors =require('cors');
 const mongoose = require('mongoose')
 
 var app = express();
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors());
 
 // database connection
 const dbURI = 'mongodb+srv://team:teampass@challenge-team.sg02r8r.mongodb.net/?retryWrites=true&w=majority';
@@ -28,6 +29,8 @@ mongoose.connect(dbURI)
     console.log(err)
   });
 
+const contratRouter = require('./routes/contrat');
+app.use('/contrat', contratRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
