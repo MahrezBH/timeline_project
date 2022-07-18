@@ -8,6 +8,13 @@ const mongoose = require('mongoose')
 var app = express();
 
 // middleware
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:4200',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+
+}));
 app.use(express.static('public'));
 app.use(logger('dev'));
 app.use(express.json());
