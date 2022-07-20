@@ -3,17 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+var xlsx = require('xlsx');
+/*var faker = require('faker');*/
+var cors = require('cors');
 
 var app = express();
 
 // middleware
 app.use(express.static('public'));
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 
 // database connection
@@ -29,8 +28,20 @@ mongoose.connect(dbURI)
   });
 
 
-const  congeRouter = require('./routes/conge');
+// project routes
+const  congeRouter =require('./routes/conge');
 const  soldeCongeRoute= require('./routes/soldeConge')
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'twig');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/conge', congeRouter);
 app.use('/soldeconge',soldeCongeRoute);

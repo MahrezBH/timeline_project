@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 const soldeCongeSchema =  mongoose.Schema(
 {
-    matricul: Number,
+    matricul: {
+        type: String,
+        required: true,
+        unique: true,
+        
+    },
 	soldeannuel	: Number,
 	soldecompensation : Number,
 	soldemaladie: Number

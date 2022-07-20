@@ -1,6 +1,9 @@
 const { model } = require("mongoose");
 const congeController = require("../controllers/conge.controller")
 const router = require("express").Router();
+const XLSX = require("xlsx");
+const { exportData } = require("../controllers/conge.controller");
+var cors = require('cors');
 
 /**
  * @Path /conge
@@ -10,8 +13,8 @@ router.route("/")
 .get(congeController.getAllConge);
 
 
-router.get("/:id",congeController.getCongeById)
-router.get("/update/:id",congeController.updateConge)
-router.get("/delete/:id",congeController.deleteConge);
-
+router.get("/:id",congeController.getCongeById);
+router.put("/update/:id",congeController.updateConge);
+router.delete("/:id",congeController.deleteConge);
+router.post("/telech",congeController.exportData);
  module.exports = router;
