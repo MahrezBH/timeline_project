@@ -17,8 +17,11 @@ const generateRandomString = (myLength) => {
 const userSchema = new mongoose.Schema({
     userType: {
         type: String,
-        enum: ['employee', 'hr', 'admin'],
+        enum: ['employee', 'hr', 'admin', 'formateur', 'staff'],
         default: 'employee'
+    },
+    maticule: {
+        type: String,
     },
     email: {
         type: String,

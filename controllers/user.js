@@ -70,11 +70,26 @@ const createToken = (id) => {
 };
 
 module.exports.signup = async (req, res) => {
-    const { email, password, username } = req.body;
+    let email, password, username, is_confirmed, userType;
+    console.log(req.body);
+    if (req.body.body) {
+        email, password, username, is_confirmed, userType = req.body.body;
+    }
+    else {
+        email = req.body.email;
+        password = req.body.password;
+        username = req.body.username;
+        console.log("email");
+        console.log(email);
+    }
+
+    if (is_confirmed == "") {
+        is_confirmed = false;
+    }
 
     try {
         const user = await User.create({
-            email, password, username
+            email, password, username, is_confirmed, userType
         });
         const token = createToken(user._id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
@@ -83,6 +98,40 @@ module.exports.signup = async (req, res) => {
     catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({ errors });
+    }
+}
+
+module.exports.list = async (req, res) => {
+    if (req.method == 'GET') {
+        try {
+            let users;
+            const userType = req.query.userType;
+            if (!userType) {
+                users = await User.find({});
+            } else {
+                users = await User.find({ userType: userType });
+            }
+
+            const userMap = [];
+            users.forEach((user) => {
+                let tmp = {};
+                tmp['_id'] = user._id;
+                tmp['userType'] = user.userType;
+                tmp['email'] = user.email;
+                tmp['username'] = user.username;
+                tmp['is_confirmed'] = user.is_confirmed;
+                tmp['created_at'] = user.created_at;
+
+                userMap.push(tmp);
+            });
+
+            res.status(200).json({ users: userMap });
+
+        }
+        catch (err) {
+            const errors = handleErrors(err);
+            res.status(400).json({ errors });
+        }
     }
 }
 
@@ -111,7 +160,12 @@ module.exports.login = async (req, res) => {
         try {
             const user = await User.login(email, password);
             const token = createToken(user._id);
-            res.status(200).json({ user: user._id, jwt: token });
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                secure: true,
+                maxAge: maxAge * 1000
+            });
+            res.status(200).json({ user: user._id, jwt: token, is_confirmed: user.is_confirmed });
         }
         catch (err) {
             const errors = handleErrors(err);
@@ -146,16 +200,17 @@ module.exports.delete = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     if (req.method == 'PUT') {
-        const { _id } = req.body;
-        console.log(_id);
+
+        const id = req.body.body.id;
+
 
         try {
-            let user = await User.findOne({ id: _id })
+            let user = await User.findOne({ _id: id })
             if (!user) {
                 res.status(400).json({ 'data': 'Inexist User' });
             }
             else {
-                await User.findByIdAndUpdate(_id, { ...req.body })
+                await User.findByIdAndUpdate(id, { ...req.body.body })
                     .then(doc => {
                         return res.status(200).json({ 'data': 'Updated with success' });
                     })
@@ -198,7 +253,7 @@ module.exports.sendCodeEmail = async (req, res) => {
         console.log(user.email);
         console.log(user.code);
         if (user) {
-            const link = `http://localhost:4000/users/code-confirm/${user._id}/${user.code}`;
+            const link = `http://localhost:4200/#/confirm/${user._id}/${user.code}`;
             const status = sendEmail(
                 user.email,
                 "Account confirmation",
@@ -223,17 +278,16 @@ module.exports.confirmCode = async (req, res) => {
             return res.status(400).send("user with given code doesn't exist");
         if (user) {
             console.log(req.params.code);
+
             if (user.code == req.params.code) {
                 user.is_confirmed = true
                 user.save()
-                return res.status(200).json();
+                return res.status(200).json("");
             }
         }
     }
     catch (err) {
-        console.log(err);
-        const errors = handleErrors(err);
-        return res.status(400).json({ errors });
+        return res.status(400).json();
     }
     return res.status(400).json();
 };

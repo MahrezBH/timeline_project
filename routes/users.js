@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const userController = require('../controllers/user');
-
 const router = Router();
 
+router.get('/', userController.list);
 router.post('/signup', userController.signup);
 router.post('/login', userController.login);
 router.get('/login', userController.login);

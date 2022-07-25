@@ -8,10 +8,11 @@ const mongoose = require('mongoose')
 var app = express();
 
 // middleware
+const verifyToken = require('./middlewares/token')
 const cors = require('cors');
 app.use(cors({
   origin: 'http://localhost:4200',
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'jwt', 'id'],
   credentials: true
 
 }));
