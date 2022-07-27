@@ -6,21 +6,24 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
-    "cros": "^1.0.1",
     "debug": "~2.6.9",
     "ejs": "^3.1.8",
     "exceljs": "^4.3.0",
     "express": "~4.16.1",
     "faker": "^6.6.6",
     "http-errors": "~1.6.3",
-    "mongoose": "^6.4.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.0",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.18",
     "nodemailer": "^6.7.7",
+    "nodemon": "^2.0.18",
     "pdfkit": "^0.13.0",
     "twig": "~0.10.3",
+    "validator": "^13.7.0",
     "xlsx": "^0.18.5"
   }
 }

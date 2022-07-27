@@ -5,12 +5,16 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 const mongoose = require('mongoose')
-var cors = require('cors');
-const cors = require('cors')
-
 var app = express();
 
 // middleware
+const verifyToken = require('./middlewares/token')
+app.use(cors({
+  origin: 'http://localhost:4200',
+  allowedHeaders: ['Content-Type', 'Authorization', 'jwt', 'id'],
+  credentials: true
+
+}));
 app.use(express.static('public'));
 
 app.use(logger('dev'));
@@ -40,27 +44,20 @@ app.use('/formations', formationRouter);
 // project routes
 const congeRouter = require('./routes/conge');
 const soldeCongeRoute = require('./routes/soldeConge')
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'twig');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/conge', congeRouter);
-app.use('/soldeconge', soldeCongeRoute);
 const contratRouter = require('./routes/contrat');
-app.use('/contrat', contratRouter);
-
 const tasksRouter = require('./controllers/tasks');
 const metiersRouter = require('./controllers/metiers');
-app.use('/tasks', tasksRouter)
+const usersRouter = require('./routes/users');
+
+app.use('/users', usersRouter);
+app.use('/conge', congeRouter);
+app.use('/soldeconge', soldeCongeRoute);
+app.use('/contrat', contratRouter);
 app.use('/metiers', metiersRouter)
+app.use('/tasks', tasksRouter)
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
