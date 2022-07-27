@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 const mongoose = require('mongoose')
 var cors = require('cors');
 var app = express();
@@ -51,6 +52,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/conge', congeRouter);
 app.use('/soldeconge', soldeCongeRoute);
+const contratRouter = require('./routes/contrat');
+app.use('/contrat', contratRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
