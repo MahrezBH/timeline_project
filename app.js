@@ -3,17 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mongoose = require('mongoose');
-var xlsx = require('xlsx');
-/*var faker = require('faker');*/
+const mongoose = require('mongoose')
 var cors = require('cors');
-
 var app = express();
 
 // middleware
 app.use(express.static('public'));
-app.use(cors());
 
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 // database connection
 const dbURI = 'mongodb+srv://team:teampass@challenge-team.sg02r8r.mongodb.net/?retryWrites=true&w=majority';
@@ -27,10 +29,14 @@ mongoose.connect(dbURI)
     console.log(err)
   });
 
+// project routes
+const formationRouter = require('./routes/formation');
+app.use('/formations', formationRouter);
+
 
 // project routes
-const  congeRouter =require('./routes/conge');
-const  soldeCongeRoute= require('./routes/soldeConge')
+const congeRouter = require('./routes/conge');
+const soldeCongeRoute = require('./routes/soldeConge')
 
 
 // view engine setup
@@ -44,7 +50,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/conge', congeRouter);
-app.use('/soldeconge',soldeCongeRoute);
+app.use('/soldeconge', soldeCongeRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
