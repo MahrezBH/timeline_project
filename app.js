@@ -6,6 +6,8 @@ var logger = require('morgan');
 var cors = require('cors');
 const mongoose = require('mongoose')
 var cors = require('cors');
+const cors = require('cors')
+
 var app = express();
 
 // middleware
@@ -16,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors())
 
 // database connection
 const dbURI = 'mongodb+srv://team:teampass@challenge-team.sg02r8r.mongodb.net/?retryWrites=true&w=majority';
@@ -54,6 +56,11 @@ app.use('/conge', congeRouter);
 app.use('/soldeconge', soldeCongeRoute);
 const contratRouter = require('./routes/contrat');
 app.use('/contrat', contratRouter);
+
+const tasksRouter = require('./controllers/tasks');
+const metiersRouter = require('./controllers/metiers');
+app.use('/tasks', tasksRouter)
+app.use('/metiers', metiersRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
